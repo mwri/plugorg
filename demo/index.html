@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+
+	<meta charset="utf-8">
+
+	<title>PlugOrg demo</title>
+
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/taffydb/taffy.js"></script>
+
+	<link href="demo.css" rel="stylesheet">
+
+	<script src="plugorg_widget_pltype.js"></script>
+	<script src="plugorg_default_widget_plugin.js"></script>
+	<script src="plugorg_log_widget_plugin.js"></script>
+	<script src="plugorg_ctrlpanel_widget_plugin.js"></script>
+	<script src="plugorg_extra_widget_plugin.js"></script>
+
+	<script src="plugorg/dist/plugorg.js"></script>
+
+</head>
+
+	<a href="#" onclick="add_extra_plugin();">Add extra plugin</a>
+
+	<ul id="component_menu"></ul>
+
+	<div id="component_container"></div>
+
+<body>
+
+	
+
+</body>
+
+
+<script>
+
+	let plugins = new plugorg();
+	plugins.add_type(plugorg_widget_pltype, $('#component_menu')[0]);
+
+	plugins.add_plugin(plugorg_default_widget_plugin);
+	plugins.add_plugin(plugorg_log_widget_plugin);
+	plugins.add_plugin(plugorg_ctrlpanel_widget_plugin);
+
+	let component_name = get_querystr_name_param() || 'default';
+
+	if (component_name === 'extra') {
+		plugins.add_plugin(plugorg_extra_widget_plugin);
+	}
+
+	let component_plugin = plugins.get_plugin({
+		type: 'widget',
+		name: component_name,
+	});
+
+	if (component_plugin === undefined)
+		throw new Error('plugin "'+component_name+'" not found');
+
+	component_plugin.render($('#component_container'));
+
+	function get_querystr_name_param () {
+		let match = /(?:\?|&)name=([^&]+)/.exec(window.location.href);
+		return match ? match[1] : undefined;
+	}
+
+	function add_extra_plugin () {
+		plugins.add_plugin(plugorg_extra_widget_plugin);
+	}
+
+</script>
+
+
+</html>
