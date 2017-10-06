@@ -12,14 +12,29 @@ module.exports = function(grunt) {
 				stripBanners: { line: true },
 				banner: '// Package: <%= pkg.name %> v<%= pkg.version %> (built <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>)\n// Copyright: (C) 2017 <%= pkg.author.name %> <<%= pkg.author.email %>>\n// License: <%= pkg.license %>\n\n\n',
 			},
+			es5: {
+				src: ['lib/*.js'],
+				dest: 'dist/<%= pkg.name %>_es5.js',
+			},
 			es6: {
 				src: ['lib/*.js'],
 				dest: 'dist/<%= pkg.name %>.js',
 			},
 		},
 
+		uglify: {
+			options: {
+				banner: '// Package: <%= pkg.name %> v<%= pkg.version %> (built <%= grunt.template.today("yyyy-mm-dd HH:MM:ss") %>)\n// Copyright: (C) 2017 <%= pkg.author.name %> <<%= pkg.author.email %>>\n// License: <%= pkg.license %>\n',
+			},
+			build: {
+				files: {
+					'dist/<%= pkg.name %>_es5.min.js': ['<%= concat.es5.dest %>']
+				},
+			},
+		},
+
 		jshint: {
-			files: ['gruntfile.js', 'lib/*.js', 'test/*.js'],
+			files: ['gruntfile.js', 'lib/*.js', 'test/**/*.js'],
 			options: {
 				esversion: 6,
 				laxbreak: true,
@@ -42,6 +57,17 @@ module.exports = function(grunt) {
 			bundle: require('./webpack.config'),
 		},
 
+		babel: {
+			options: {
+				presets: ['es2015'],
+			},
+			build: {
+				files: {
+					'dist/plugorg_es5.js': 'dist/plugorg_es5.js',
+				},
+			},
+		},
+
 		watch: {
 			full: {
 				options: {
@@ -49,8 +75,7 @@ module.exports = function(grunt) {
 				},
 				files: [
 					'lib/*.js',
-					'test/*.js',
-					'test/node_modules/*/*.js',
+					'test/**/*.js',
 				],
 				tasks: ['build'],
 			},
@@ -82,7 +107,10 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('build', [
 		'jshint',
+		'concat:es5',
 		'concat:es6',
+		'babel',
+		'uglify',
 		'webpack',
 		'mocha_istanbul',
 	]);
@@ -93,6 +121,7 @@ module.exports = function(grunt) {
 		'concat:es6',
 		'babel',
 		'uglify',
+		'webpack',
 		'mocha_istanbul',
 	]);
 
