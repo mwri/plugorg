@@ -308,11 +308,3 @@ This is much the same as finding plugins, the only different being types do
 not have a type. Two methods exist, `get_type` and `get_types`, and valid
 keys are 'name', and anything that may be returned by a type's `po_attribs`
 method.
-
-## Build
-
-Run `npm install` to install the dev/build dependencies, and
-`grunt build` to build.
-
-Run `grunt watch_dev` to invoke a continuous file watch build
-test cycle.

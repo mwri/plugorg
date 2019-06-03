@@ -4,13 +4,8 @@
 "use strict";
 
 
-let plugorg;
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-	plugorg = require('./../dist/plugorg.js');
-	require('chai-jasmine');
-} else {
-	plugorg = window.plugorg;
-}
+let plugorg      = require('./../dist/plugorg.js');
+let chai_jasmine = require('chai-jasmine');
 
 
 let mi_pt1_con  = require('./node_modules/pt1/index.js');
@@ -73,9 +68,6 @@ describe('instantiates', function() {
 	});
 
 });
-
-
-
 
 
 })();
