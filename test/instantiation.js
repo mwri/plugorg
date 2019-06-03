@@ -4,7 +4,7 @@
 "use strict";
 
 
-let plugorg      = require('./../dist/plugorg.js');
+let plugorg      = require('./../lib/plugorg.js');
 let chai_jasmine = require('chai-jasmine');
 
 
